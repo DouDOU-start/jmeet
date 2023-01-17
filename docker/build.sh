@@ -5,27 +5,27 @@ IMAGE_NAME="jmeet-meet"
 
 DIR_OF_ROOT=../../
 DIR_OF_MEET=../
-DIR_OF_LIB=../../lib-jitsi-meet
+DIR_OF_LIB=../../lib-jmeet
 
 # lib-jitsi-meet工程编译
-# pushd $DIR_OF_LIB > /dev/null
-#     echo ""
-#     echo "start to compile lib-jitsi-meet.."
-#     echo ""
-#     rm -rf dist
-#     npm install
-#     npm run build:webpack && npm run build:tsc
-# popd
+pushd $DIR_OF_LIB > /dev/null
+    echo ""
+    echo "start to compile lib-jitsi-meet.."
+    echo ""
+    rm -rf dist
+    npm install
+    npm run build:webpack && npm run build:tsc
+popd
 
 # jitsi-meet工程编译
 pushd $DIR_OF_MEET > /dev/null
     echo ""
     echo "start to compile jitsi-meet.."
     echo ""
-    # npm install
-    # npm install lib-jitsi-meet --force && make deploy-lib-jitsi-meet
-    # rm -rf libs
-    # make
+    npm install
+    npm install lib-jitsi-meet --force && make deploy-lib-jitsi-meet
+    rm -rf libs
+    make
     dpkg-buildpackage -A -rfakeroot -us -uc -tc
 popd
 
