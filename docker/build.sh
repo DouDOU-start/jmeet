@@ -7,20 +7,20 @@ DIR_OF_ROOT=../../
 DIR_OF_MEET=../
 DIR_OF_LIB=../../lib-jmeet
 
-# lib-jitsi-meet工程编译
+# lib-jmeet工程编译
 pushd $DIR_OF_LIB > /dev/null
     echo ""
-    echo "start to compile lib-jitsi-meet.."
+    echo "start to compile lib-jmeet.."
     echo ""
     rm -rf dist
     npm install
     npm run build:webpack && npm run build:tsc
 popd
 
-# jitsi-meet工程编译
+# jmeet工程编译
 pushd $DIR_OF_MEET > /dev/null
     echo ""
-    echo "start to compile jitsi-meet.."
+    echo "start to compile jmeet.."
     echo ""
     npm install
     npm install lib-jitsi-meet --force && make deploy-lib-jitsi-meet
