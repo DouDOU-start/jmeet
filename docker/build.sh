@@ -40,6 +40,4 @@ mv -f $DIR_OF_ROOT/*.deb build
 rm -r $DIR_OF_ROOT/*.buildinfo
 rm -r $DIR_OF_ROOT/*.changes
 
-
-
 docker build -t doudou/${IMAGE_NAME}:${VERSION} .
