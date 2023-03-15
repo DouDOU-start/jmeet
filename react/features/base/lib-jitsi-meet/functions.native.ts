@@ -20,6 +20,7 @@ export async function loadConfig(url: string): Promise<Object> {
     try {
         const configTxt = await loadScript(url, 10 * 1000 /* Timeout in ms */, true /* skipeval */);
         const configJson = await JavaScriptSandbox.evaluate(`${configTxt}\nJSON.stringify(config);`);
+        // logger.error(`configJson ${configJson}`);
         const config = Bourne.parse(configJson);
 
         if (typeof config !== 'object') {

@@ -26,9 +26,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.facebook.react.ReactRootView;
+import com.facebook.react.modules.network.OkHttpClientProvider;
 import com.rnimmersive.RNImmersiveModule;
 
 import org.jitsi.meet.sdk.log.JitsiMeetLogger;
+import org.jitsi.meet.sdk.net.UnsafeHttpClientFactory;
 
 
 public class JitsiMeetView extends FrameLayout {
@@ -152,6 +154,7 @@ public class JitsiMeetView extends FrameLayout {
      *                when doing so.
      */
     public void join(@Nullable JitsiMeetConferenceOptions options) {
+        OkHttpClientProvider.setOkHttpClientFactory(new UnsafeHttpClientFactory());
         setProps(options != null ? options.asProps() : new Bundle());
     }
 
