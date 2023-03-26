@@ -67,5 +67,110 @@ $ npm pack
 # 切换工作目录到jmeet目录
 $ cd jmeet
 # 安装lib-jitsi-meet模块依赖
-$ npm install --no-package-lock ../lib-jmeet/lib-jitsi-meet-version.tgz
+$ npm i --no-save --no-package-lock ../lib-jmeet/lib-jitsi-meet-version.tgz
+
+# tip：如果报 npm ERR! notarget No matching version found for yallist@3.0.2. 异常,
+# 建议尝试不使用私有仓库再进行install。
+```
+
+## 通过 android stadio 运行
+
+如果您想通过`android stadio`使用`debug`运行app：
+1. 生成debug.keystore到jmeet/android/app目录，生成配置在jmeet/android/keystores目录；
+2. 切换工作目录到jmeet目录，运行`npx react-native start`命令将js代码加载到debug app中，否则app无法正常运行。
+
+### 调试环境下wss连接关闭ssl证书校验
+
+1. 使用react-native（这里使用的版本就是0.68.5，以此为例）源码进行编译，直接去[react-native仓库](https://github.com/facebook/react-native.git)下载源代码；
+2. `npm install`安装依赖；
+3. 依赖安装完成后编译一遍项目，编译完成后保证代码不报错;
+    ```shell
+    # linux环境
+    $ ./gradlew clean assebleDebug
+    # window环境
+    $ gradlew.bat clean assebleDebug
+    ```
+4. `Ctrl+N`搜索`WebSocketModule.java`源码，找到`connect`方法，修改`OkHttpClient.Builder()`关闭`ssl`证书校验;
+   ```java
+    OkHttpClient client = new OkHttpClient.Builder()
+        .sslSocketFactory(getSSLSocketFactory(), getX509TrustManager()) // 通过sslSocketFactory方法设置https证书
+        .hostnameVerifier(getHostnameVerifier())
+        .cookieJar(new ReactCookieJarContainer())
+        .connectTimeout(10, TimeUnit.SECONDS)
+        .writeTimeout(10, TimeUnit.SECONDS)
+        .readTimeout(0, TimeUnit.MINUTES) // Disable timeouts for read
+        .build();
+
+    public static SSLSocketFactory getSSLSocketFactory() {
+        try {
+          SSLContext sslContext = SSLContext.getInstance("SSL");
+          sslContext.init(null, getTrustManager(), new SecureRandom());
+          return sslContext.getSocketFactory();
+        } catch (Exception e) {
+          throw new RuntimeException(e);
+        }
+      }
+
+      private static TrustManager[] getTrustManager() {
+        TrustManager[] trustAllCerts = new TrustManager[]{
+          new X509TrustManager() {
+            @Override
+            public void checkClientTrusted(X509Certificate[] chain, String authType) {
+            }
+
+            @Override
+            public void checkServerTrusted(X509Certificate[] chain, String authType) {
+            }
+
+            @Override
+            public X509Certificate[] getAcceptedIssuers() {
+              return new X509Certificate[]{};
+            }
+          }
+        };
+        return trustAllCerts;
+      }
+
+      public static HostnameVerifier getHostnameVerifier() {
+        HostnameVerifier hostnameVerifier = (s, sslSession) -> true;
+        return hostnameVerifier;
+      }
+
+      public static X509TrustManager getX509TrustManager() {
+        X509TrustManager x509TrustManager = new X509TrustManager() {
+          //检查客户端的证书是否可信
+          @Override
+          public void checkClientTrusted(X509Certificate[] chain, String authType) {
+
+          }
+          //检查服务器端的证书是否可信
+          @Override
+          public void checkServerTrusted(X509Certificate[] chain, String authType) {
+
+          }
+
+          @Override
+          public X509Certificate[] getAcceptedIssuers() {
+            return new X509Certificate[0];
+          }
+        };
+        return x509TrustManager;
+      }
+   ```
+5. 打包aar，如果直接在项目中依赖RN的源码，不是一个很好的选择，更好的方式是将RN源码编译打包为一个aar文件，然后在Android项目中使用，打包aar的命令如下：
+   ```shell
+   # linux环境
+   ./gradlew :ReactAndroid:installArchives --no-daemon
+   # window环境
+   $ gradlew.bat :ReactAndroid:installArchives --no-daemon
+   ```
+6. 将本地生成的android目录直接替换到jmeet/node_module/reactive/android目录即可。
+
+## 生成发行APK包
+
+只需在终端运行以下命令：
+
+```shell
+$ cd jmeet/android
+$ ./gradlew assembleRelease
 ```
