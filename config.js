@@ -56,6 +56,7 @@ var config = {
     // https://github.com/jitsi/jitsi-meet/issues/7376
     // focusUserJid: 'focus@auth.jitsi-meet.example.com',
 
+    flags: {},
 
     // Testing / experimental features.
     //
