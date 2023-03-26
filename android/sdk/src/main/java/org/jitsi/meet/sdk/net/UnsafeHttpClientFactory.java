@@ -43,6 +43,9 @@ public class UnsafeHttpClientFactory implements OkHttpClientFactory {
         return new OkHttpClient.Builder()
             .sslSocketFactory(getSSLSocketFactory(), getX509TrustManager()) // //通过sslSocketFactory方法设置https证书
             .hostnameVerifier(getHostnameVerifier())
+            // .connectTimeout(0, TimeUnit.SECONDS)
+	        // .writeTimeout(0, TimeUnit.SECONDS)
+	        // .readTimeout(0, TimeUnit.SECONDS)
             .cookieJar(new ReactCookieJarContainer())
             .build();
     }
