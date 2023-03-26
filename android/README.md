@@ -73,9 +73,9 @@ $ npm i --no-save --no-package-lock ../lib-jmeet/lib-jitsi-meet-version.tgz
 # 建议尝试不使用私有仓库再进行install。
 ```
 
-## 通过 android stadio 运行
+## 通过 android studio 运行
 
-如果您想通过`android stadio`使用`debug`运行app：
+如果您想通过`android studio`使用`debug`运行app：
 1. 生成debug.keystore到jmeet/android/app目录，生成配置在jmeet/android/keystores目录；
 2. 切换工作目录到jmeet目录，运行`npx react-native start`命令将js代码加载到debug app中，否则app无法正常运行。
 
