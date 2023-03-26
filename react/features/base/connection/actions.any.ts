@@ -155,14 +155,15 @@ export function constructOptions(state: IReduxState) {
 
     let { bosh, websocket } = options;
 
+    // DouDOU_d 暂时注释，统一使用ws连接
     // TESTING: Only enable WebSocket for some percentage of users.
-    if (websocket && navigator.product === 'ReactNative') {
-        if ((Math.random() * 100) >= (options?.testing?.mobileXmppWsThreshold ?? 0)) {
-            // DouDOU_c 不能将类型“undefined”分配给类型“string”。
-            websocket = '';
-            // websocket = undefined;
-        }
-    }
+    // if (websocket && navigator.product === 'ReactNative') {
+    //     if ((Math.random() * 100) >= (options?.testing?.mobileXmppWsThreshold ?? 0)) {
+    //         // DouDOU_c 不能将类型“undefined”分配给类型“string”。
+    //         websocket = '';
+    //         // websocket = undefined;
+    //     }
+    // }
 
     // Normalize the BOSH URL.
     if (bosh && !websocket) {
